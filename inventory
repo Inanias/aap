@@ -1,2 +1,6 @@
 [group_a]
 localhost
+demo.example.com
+
+[group_b]
+localhost
