@@ -8,4 +8,4 @@
 
     - name: Output collections
       debug:
-        msg: "{{ collections }}"
+        msg: "{{ collections.stdout_lines }}"
