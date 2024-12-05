@@ -12,4 +12,4 @@
 
     - command: echo $ANSIBLE_ROLES_PATH
 
-    - command: ls -la /runner/requirements_roles ~/.ansible/roles /usr/share/ansible/roles /etc/ansible/roles
+    - command: ls -la /runner/requirements_roles
