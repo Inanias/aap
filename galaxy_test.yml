@@ -10,9 +10,4 @@
       debug:
         msg: "{{ ansible_role_names }}"
 
-    - name: ansible_search_path
-      debug:
-        msg: "{{ ansible_search_path }}"
-
-    - name: check ansible_search_path
-      command: "ls -la {{ ansible_search_path }}"
+    - command: echo $ANSIBLE_ROLES_PATH
