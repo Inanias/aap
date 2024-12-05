@@ -1,7 +1,4 @@
 ---
-collections:
-  - community.general
-  - community.aws
 roles:
   - name: chusiang.helloworld
   - src: https://github.com/bennojoy/nginx
