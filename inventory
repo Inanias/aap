@@ -6,4 +6,4 @@ demo.example.com
 localhost
 
 [all:vars]
-ansible_connection: local
+ansible_connection=local
