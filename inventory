@@ -1,8 +1,7 @@
-[group_a]
-localhost
+[prod]
 demo.example.com
 
-[group_b]
+[dev]
 localhost
 
 [all:vars]
