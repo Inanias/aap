@@ -3,6 +3,6 @@
   hosts: all
 
   tasks:
-    - name: Output environment
+    - name: Output env
       debug:
         msg: "{{ env }}"
