@@ -1,2 +1,5 @@
 [prod]
 demo.example.com
+
+[prod:vars]
+inventory_env=prod

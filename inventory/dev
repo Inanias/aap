@@ -1,2 +1,5 @@
 [dev]
 localhost
+
+[dev:vars]
+inventory_env=dev

@@ -4,6 +4,10 @@
   gather_facts: false
 
   tasks:
-    - name: Output env
+    - name: Output env from group
       debug:
-        msg: "{{ env }}"
+        msg: "{{ group_env }}"
+
+    - name: Output env from inventory
+      debug:
+        msg: "{{ inventory_env }}"
