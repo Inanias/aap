@@ -5,4 +5,4 @@
   tasks:
     - name: output env
       debug:
-        msg: "{{ env }}"
+        msg: "{{ environment }}"
