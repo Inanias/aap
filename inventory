@@ -5,4 +5,5 @@ demo.example.com
 [group_b]
 localhost
 
+[all:vars]
 ansible_connection: local
