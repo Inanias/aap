@@ -4,3 +4,5 @@ demo.example.com
 
 [group_b]
 localhost
+
+ansible_connection: local
