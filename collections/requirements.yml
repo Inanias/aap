@@ -1,3 +1,4 @@
 ---
 collections:
-  - src: https://github.com/Inanias/collection
+  - name: test.collection
+    source: https://github.com/Inanias/collection
