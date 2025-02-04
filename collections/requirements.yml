@@ -1,4 +1,4 @@
 ---
 collections:
   - name: test.collection
-    source: https://github.com/Inanias/collection
+    source: git@github.com:Inanias/collection.git
