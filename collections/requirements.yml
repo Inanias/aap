@@ -1,6 +1,3 @@
 ---
 collections:
-  - git@github.com:Inanias/collection.git
-  - name: my.collection
-    type: git
-    source: git@github.com:Inanias/my.collection.git
+  - git@github.com:Inanias/my.collection.git

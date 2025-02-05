@@ -1,12 +1,12 @@
 ---
-- name: List collections
+- name: List Collections
   hosts: localhost
   gather_facts: false
   tasks:
-    - name: Check collections
+    - name: Check Collections
       shell: 'unset ANSIBLE_COLLECTIONS_PATHS && ansible-galaxy collection list'
       register: collections
 
-    - name: Output collections
+    - name: Output Collections
       debug:
         msg: "{{ collections.stdout_lines }}"

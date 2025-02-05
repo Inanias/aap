@@ -1,0 +1,8 @@
+---
+- name: Collection Test
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - my.collection.one
+    - my.collection.two
