@@ -8,4 +8,4 @@
     - my.collection.two
 
 - name: Playbook
-  ansible.builtin.import_playbook: my.collection.playbook
+  ansible.builtin.import_playbook: my.collection.one
