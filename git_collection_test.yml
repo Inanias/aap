@@ -7,6 +7,5 @@
     - my.collection.one
     - my.collection.two
 
-  tasks:
-    - name: Playbook
-      ansible.builtin.import_playbook: my.collection.playbook
+- name: Playbook
+  ansible.builtin.import_playbook: my.collection.playbook
