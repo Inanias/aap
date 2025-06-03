@@ -1,0 +1,58 @@
+---
+# Source: https://docs.ansible.com/ansible/latest/collections/community/crypto/docsite/guide_ownca.html
+- name: Certificate
+  hosts: localhost
+
+  tasks:
+    - name: Create private key
+      community.crypto.openssl_privatekey:
+        path: ca-certificate.key
+
+    - name: Create certificate signing request (CSR) for CA certificate
+      community.crypto.openssl_csr_pipe:
+        privatekey_path: ca-certificate.key
+        common_name: Demo CA
+        use_common_name_for_san: false  # since we do not specify SANs, don't use CN as a SAN
+        basic_constraints:
+          - 'CA:TRUE'
+        basic_constraints_critical: true
+        key_usage:
+          - keyCertSign
+        key_usage_critical: true
+      register: ca_csr
+
+    - name: Create self-signed CA certificate from CSR
+      community.crypto.x509_certificate:
+        path: ca-certificate.pem
+        csr_content: "{{ ca_csr.csr }}"
+        privatekey_path: ca-certificate.key
+        provider: selfsigned
+
+    - name: Create private key for new certificate
+      community.crypto.openssl_privatekey:
+        path: certificate.key
+
+    - name: Create certificate signing request (CSR) for new certificate
+      community.crypto.openssl_csr_pipe:
+        privatekey_path: certificate.key
+        common_name: demo.example.com
+        subject_alt_name:
+          - "DNS:demo.example.com"
+          - "DNS:24.aap"
+          - "DNS:25.aap"
+      register: csr
+
+    - name: Sign certificate with our CA
+      community.crypto.x509_certificate_pipe:
+        csr_content: "{{ csr.csr }}"
+        provider: ownca
+        ownca_path: ca-certificate.pem
+        ownca_privatekey_path: ca-certificate.key
+        ownca_not_after: +365d  # valid for one year
+        ownca_not_before: "-1d"  # valid since yesterday
+      register: certificate
+
+    - name: Write certificate file
+      copy:
+        dest: certificate.pem
+        content: "{{ certificate.certificate }}"
