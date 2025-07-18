@@ -1,0 +1,8 @@
+---
+- name: Use local roles
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - one
+    - two

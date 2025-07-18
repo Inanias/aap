@@ -1,0 +1,4 @@
+---
+- name: My Task
+  ansible.builtin.debug:
+    msg: "Role One"
