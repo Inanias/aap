@@ -1,54 +1,71 @@
 ---
-# Source: https://docs.ansible.com/ansible/latest/collections/community/crypto/docsite/guide_ownca.html
 - name: Certificate
   hosts: localhost
 
-  tasks:
-    - name: Create private key
-      community.crypto.openssl_privatekey:
-        path: ca-certificate.key
+  vars:
+    hostnames:
+     - example.tld
 
-    - name: Create certificate signing request (CSR) for CA certificate
+  tasks:
+    - name: Create CA private key
+      community.crypto.openssl_privatekey:
+        path: demo-ca-certificate.key
+
+    - name: Create CA certificate signing request
       community.crypto.openssl_csr_pipe:
-        privatekey_path: ca-certificate.key
+        privatekey_path: demo-ca-certificate.key
         common_name: Demo CA
-        use_common_name_for_san: false  # since we do not specify SANs, don't use CN as a SAN
+        use_common_name_for_san: false
         basic_constraints:
           - 'CA:TRUE'
         basic_constraints_critical: true
         key_usage:
           - keyCertSign
         key_usage_critical: true
-      register: ca_csr
+      register: ca_request
 
-    - name: Create self-signed CA certificate from CSR
+    - name: Create CA certificate
       community.crypto.x509_certificate:
-        path: ca-certificate.pem
-        csr_content: "{{ ca_csr.csr }}"
-        privatekey_path: ca-certificate.key
+        path: demo-ca-certificate.pem
+        csr_content: "{{ ca_request.csr }}"
+        privatekey_path: demo-ca-certificate.key
         provider: selfsigned
 
-    - name: Create private key for new certificate
+    - name: Create private key
       community.crypto.openssl_privatekey:
-        path: certificate.key
+        path: "demo-{{ hostname }}.key"
+      loop: "{{ hostnames }}"
+      loop_control:
+        loop_var: hostname
 
-    - name: Create certificate signing request (CSR) for new certificate
+    - name: Create certificate signing request
       community.crypto.openssl_csr_pipe:
-        privatekey_path: certificate.key
-        common_name: 25.aap
-      register: csr
+        privatekey_path: "demo-{{ hostname }}.key"
+        common_name: "{{ hostname }}"
+      register: requests
+      loop: "{{ hostnames }}"
+      loop_control:
+        loop_var: hostname
 
-    - name: Sign certificate with our CA
+    - name: Sign certificate with CA
       community.crypto.x509_certificate_pipe:
-        csr_content: "{{ csr.csr }}"
+        csr_content: "{{ request.csr }}"
         provider: ownca
-        ownca_path: ca-certificate.pem
-        ownca_privatekey_path: ca-certificate.key
-        ownca_not_after: +365d  # valid for one year
-        ownca_not_before: "-1d"  # valid since yesterday
-      register: certificate
+        ownca_path: demo-ca-certificate.pem
+        ownca_privatekey_path: demo-ca-certificate.key
+        ownca_not_after: +800d
+        ownca_not_before: "-1d"
+      register: certificates
+      loop: "{{ requests.results }}"
+      loop_control:
+        label: "{{ request.hostname }}"
+        loop_var: request
 
-    - name: Write certificate file
+    - name: Create certificate
       copy:
-        dest: certificate.pem
+        dest: "demo-{{ certificate.request.hostname }}.pem"
         content: "{{ certificate.certificate }}"
+      loop: "{{ certificates.results }}"
+      loop_control:
+        label: "{{ certificate.request.hostname }}"
+        loop_var: certificate
