@@ -1,0 +1,10 @@
+---
+- name: Collection Test
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Install nmap
+      community.general.zypper:
+        name: nmap
+        state: present
