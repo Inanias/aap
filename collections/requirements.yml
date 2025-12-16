@@ -1,4 +1,4 @@
 ---
 collections:
-  - git@github.com:Inanias/my.collection.git
+#  - git@github.com:Inanias/my.collection.git
   - name: community.general
